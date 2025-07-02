@@ -3,7 +3,6 @@ from pyspark.sql import SparkSession
 
 
 
-
 def do_monthly_user_site_hits_transformation(spark, dataframe, ds):
     query = f"""
     SELECT
@@ -21,9 +20,5 @@ def do_monthly_user_site_hits_transformation(spark, dataframe, ds):
 
 def main():
     ds = '2023-01-01'
-    spark = SparkSession.builder \
-      .master("local") \
-      .appName("players_scd") \
-      .getOrCreate()
+    spark = SparkSession.builder       .master("local")       .appName("players_scd")       .getOrCreate()
     output_df = do_monthly_user_site_hits_transformation(spark, spark.table("monthly_user_site_hits"), ds)
-    output_df.write.mode("overwrite").insertInto("monthly_user_site_hits_agg")
