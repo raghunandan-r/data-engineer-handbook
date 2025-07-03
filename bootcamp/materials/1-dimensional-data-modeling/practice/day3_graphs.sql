@@ -101,16 +101,6 @@ FROM deduped_game_deets
 WHERE rn = 1;
 
 
-SELECT
-    v.properties->>'player_name',
-    MAX(CAST(e.properties->>'pts' AS INTEGER))
-FROM vertices v
-    JOIN edges e
-ON e.subject_identifier = v.identifier
-AND e.subject_type = v.type
-GROUP BY 1
-ORDER BY 2 DESC;
-
 INSERT INTO edges
 WITH deduped AS (
     SELECT *, row_number() over (partition by player_id, game_id) AS rn
@@ -152,8 +142,6 @@ SELECT
     )
     FROM aggregated;
 
-DROP TABLE edges;
-
 SELECT
     v.properties->>'player_name',
     e.object_identifier,
@@ -166,3 +154,4 @@ FROM
 ON v.identifier = e.subject_identifier
 AND v.type = e.subject_type
 WHERE e.object_type = 'player'::vertex_type;
+
